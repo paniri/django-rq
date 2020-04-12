@@ -5,18 +5,18 @@ from django.conf import settings
 
 from .jobs import get_job_class
 from .queues import get_queues
+import os
 
+# def get_exception_handlers():
+#     """
+#     Custom exception handlers could be defined in settings.py:
+#     RQ = {
+#         'EXCEPTION_HANDLERS': ['path.to.handler'],
+#     }
+#     """
+#     from .settings import EXCEPTION_HANDLERS
 
-def get_exception_handlers():
-    """
-    Custom exception handlers could be defined in settings.py:
-    RQ = {
-        'EXCEPTION_HANDLERS': ['path.to.handler'],
-    }
-    """
-    from .settings import EXCEPTION_HANDLERS
-
-    return [import_attribute(path) for path in EXCEPTION_HANDLERS]
+#     return [import_attribute(os.path) for path in EXCEPTION_HANDLERS]
 
 
 def get_worker_class(worker_class=None):
@@ -50,7 +50,7 @@ def get_worker(*queue_names, **kwargs):
     worker_class = get_worker_class(kwargs.pop('worker_class', None))
     return worker_class(queues,
                         connection=queues[0].connection,
-                        exception_handlers=get_exception_handlers() or None,
+                        # exception_handlers=get_exception_handlers() or None,
                         job_class=job_class,
                         queue_class=queue_class,
                         **kwargs)
